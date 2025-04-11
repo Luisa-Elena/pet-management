@@ -87,7 +87,7 @@ So after the time treshold, the adoption is deleted and if the admin fetches all
 
 Cleanup logs:  
 
-![Image](https://github.com/user-attachments/assets/9f2169ff-22c9-45e0-828c-cf2c53f4064f)  
+![Image](https://github.com/user-attachments/assets/123584b6-00bf-470b-9320-79269b3fd9e2)
 
 Also the pet is deleted, after its adoption was deleted (Rex is no longer in the database):  
 
