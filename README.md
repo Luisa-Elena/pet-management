@@ -19,7 +19,7 @@ For the pet shelter application there are endpoints for CRUD operations on pets,
 
 
 ## Pets
-Only the admin can create, update or delete a pet. Users can only view the pets that are not adopted yet.  
+Only the admin can create, update or delete a pet. Users can only view the pets (filtered such that they only see those who are not adopted yet)  
 
 
 ### `GET /v1/pets
@@ -27,7 +27,7 @@ Only the admin can create, update or delete a pet. Users can only view the pets 
 
 ![Image](https://github.com/user-attachments/assets/1349c752-5654-4727-ae80-300fbf7b3b39)  
 
-Filtered pets by species
+Filtered pets by species (works similarly for filtering after name or the boolean 'isAdopted' and also, filter criteria can be combined)    
 
 ![Image](https://github.com/user-attachments/assets/c7f14747-86a7-43bd-8c10-cd979da2a1a5)  
 
