@@ -42,7 +42,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers(SecurityConstants.AUTH_PATHS_TO_SKIP).permitAll()
                         .requestMatchers(SecurityConstants.SWAGGER_PATHS_TO_SKIP).permitAll()
-                        .anyRequest().permitAll())
+                        .anyRequest().authenticated())
                 .exceptionHandling(handler -> handler
                         .authenticationEntryPoint(authenticationEntryPoint))
                 .authenticationManager(authenticationManager)

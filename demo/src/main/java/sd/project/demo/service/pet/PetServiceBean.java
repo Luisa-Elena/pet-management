@@ -74,9 +74,7 @@ public class PetServiceBean implements PetService {
 
     @Override
     public PetResponseDTO update(UUID id, PetRequestDTO petRequestDTO) {
-        if (petRepository.existsByName(petRequestDTO.name())) {
-            throw new DuplicateDataException(ExceptionCode.PET_NAME_TAKEN, petRequestDTO.name());
-        }
+
         PetEntity petEntityToBeUpdated = petRepository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException(ExceptionCode.PET_NOT_FOUND, id));
 
