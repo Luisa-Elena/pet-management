@@ -26,13 +26,13 @@ public class AdoptionCleanupJob {
         LocalDateTime threshold = LocalDateTime.now().minusSeconds(10); //10 seconds for demonstration
         List<AdoptionEntity> oldAdoptions = adoptionRepository.findByAdoptionTimestampBefore(threshold);
 
+        if (!oldAdoptions.isEmpty()) {
+            log.info("[CLEANUP] Deleted old adoptions: {}", oldAdoptions.size());
+        }
+
         for (AdoptionEntity adoption : oldAdoptions) {
             petRepository.delete(adoption.getPet());
             adoptionRepository.delete(adoption);
-        }
-
-        if (!oldAdoptions.isEmpty()) {
-            log.info("[CLEANUP] Deleted old adoptions: {}", oldAdoptions.size());
         }
     }
 }
