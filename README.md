@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Pet Shelter Management Backend: API Documentation
 
 ## Introduction
