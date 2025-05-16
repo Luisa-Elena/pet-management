@@ -66,6 +66,7 @@ public class PetServiceBean implements PetService {
         pet.setDescription(petRequestDTO.description());
         pet.setSpecies(species);
         pet.setIsAdopted(false);
+        pet.setImageUrl(petRequestDTO.imageUrl());
 
         petRepository.save(pet);
 

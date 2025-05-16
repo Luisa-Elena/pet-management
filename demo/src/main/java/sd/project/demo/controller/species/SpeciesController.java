@@ -21,6 +21,7 @@ import java.util.UUID;
 
 @RequestMapping("/v1/species")
 @Tag(name = "Species Management", description = "Operations for managing species")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public interface SpeciesController {
 
     @GetMapping
@@ -34,7 +35,7 @@ public interface SpeciesController {
                             schema = @Schema(implementation = ExceptionBody.class)))
     })
     @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     List<SpeciesResponseDTO> findAll();
 
     @GetMapping("/{name}")

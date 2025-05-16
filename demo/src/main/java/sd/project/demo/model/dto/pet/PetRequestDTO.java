@@ -9,7 +9,7 @@ public record PetRequestDTO(
         String name,
 
         @NotBlank(message = "Description is required and cannot be empty.")
-        @Size(min = 2, max = 30, message = "Description must be between 2 and 100 characters.")
+        @Size(min = 2, max = 1000, message = "Description must be between 2 and 1000 characters.")
         String description,
 
         @NotBlank(message = "Species is required and cannot be empty.")

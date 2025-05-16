@@ -20,7 +20,7 @@ public enum ExceptionCode {
 
     //Adoption Errors
     ADOPTION_NOT_FOUND("Adoption %s not found.", "ERR_2005"),
-    PET_ALREADY_ADOPTED("The pet named %s is already adopted.", "ERR_2006"),
+    PET_ALREADY_ADOPTED("You have already requested for adoption the pet named %s.", "ERR_2006"),
 
     //User Errors
     USER_NOT_FOUND("User %s not found.", "ERR_2007"),

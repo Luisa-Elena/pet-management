@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import sd.project.demo.model.entity.AdoptionEntity;
+import sd.project.demo.model.entity.Status;
 import sd.project.demo.repository.adoption.AdoptionRepository;
 import sd.project.demo.repository.pet.PetRepository;
 
@@ -23,7 +24,7 @@ public class AdoptionCleanupJob {
     @Scheduled(fixedRate = 10000)
     @Transactional
     public void deleteOldAdoptions() {
-        LocalDateTime threshold = LocalDateTime.now().minusSeconds(10); //10 seconds for demonstration
+        LocalDateTime threshold = LocalDateTime.now().minusWeeks(1); // Delete adoptions which are more than one week old
         List<AdoptionEntity> oldAdoptions = adoptionRepository.findByAdoptionTimestampBefore(threshold);
 
         if (!oldAdoptions.isEmpty()) {
@@ -31,8 +32,10 @@ public class AdoptionCleanupJob {
         }
 
         for (AdoptionEntity adoption : oldAdoptions) {
-            petRepository.delete(adoption.getPet());
-            adoptionRepository.delete(adoption);
+            if(adoption.getStatus() == Status.ACCEPTED) {
+                adoptionRepository.delete(adoption);
+                petRepository.delete(adoption.getPet());
+            }
         }
     }
 }

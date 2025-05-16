@@ -22,6 +22,7 @@ import java.util.UUID;
 
 @RequestMapping("/v1/adoptions")
 @Tag(name = "Adoption Management", description = "Operations for managing adoptions")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public interface AdoptionController {
 
     @GetMapping

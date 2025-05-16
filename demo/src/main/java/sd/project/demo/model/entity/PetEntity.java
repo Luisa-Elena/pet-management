@@ -31,7 +31,7 @@ public class PetEntity {
     @JoinColumn(name = "SPECIES_ID")
     private SpeciesEntity species;
 
-    @JoinColumn(name = "IMAGE_URL")
+    @Column(name = "IMAGE_URL")
     private String imageUrl;
 
     @Column(name = "IS_ADOPTED")

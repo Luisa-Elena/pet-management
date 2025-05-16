@@ -21,6 +21,7 @@ import sd.project.demo.repository.adoption.AdoptionSpec;
 import sd.project.demo.repository.pet.PetRepository;
 import sd.project.demo.repository.user.UserRepository;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
@@ -64,18 +65,16 @@ public class AdoptionServiceBean implements AdoptionService{
         PetEntity pet = petRepository.findByName(adoptionRequestDTO.petName())
                 .orElseThrow(() -> new DataNotFoundException(ExceptionCode.PET_NOT_FOUND, adoptionRequestDTO.petName()));
 
-        boolean isPetAlreadyAdopted = adoptionRepository.existsByPet(pet);
+        boolean isPetAlreadyAdopted = adoptionRepository.existsByUserAndPet(user, pet);
         if (isPetAlreadyAdopted) {
             throw new PetAlreadyAdoptedException(ExceptionCode.PET_ALREADY_ADOPTED, adoptionRequestDTO.petName());
         }
-
-        pet.setIsAdopted(true);
-        petRepository.save(pet);
 
         AdoptionEntity adoption = new AdoptionEntity();
         adoption.setUser(user);
         adoption.setPet(pet);
         adoption.setStatus(Status.PENDING);
+        adoption.setAdoptionTimestamp(LocalDateTime.now());
 
         adoptionRepository.save(adoption);
 
@@ -83,23 +82,42 @@ public class AdoptionServiceBean implements AdoptionService{
     }
 
     @Override
+    @Transactional
     public AdoptionResponseDTO update(UUID id, AdoptionRequestDTO adoptionRequestDTO) {
         AdoptionEntity adoptionEntityToBeUpdated = adoptionRepository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException(ExceptionCode.ADOPTION_NOT_FOUND, id));
 
+        PetEntity pet = petRepository.findByName(adoptionRequestDTO.petName())
+                .orElseThrow(() -> new DataNotFoundException(ExceptionCode.PET_NOT_FOUND, adoptionRequestDTO.petName()));
+
         adoptionEntityToBeUpdated.setStatus(Status.ACCEPTED);
         AdoptionEntity adoptionEntitySaved = adoptionRepository.save(adoptionEntityToBeUpdated);
+
+        pet.setIsAdopted(true);
+        petRepository.save(pet);
+
+        adoptionRepository.deleteByPetAndStatus(pet, Status.PENDING);
+
         return adoptionMapper.convertEntityToResponseDto(adoptionEntitySaved);
     }
 
     @Override
     @Transactional
     public void delete(UUID id) {
+        boolean canDeletePet = false;
+
         AdoptionEntity adoption = adoptionRepository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException(ExceptionCode.ADOPTION_NOT_FOUND, id));
 
-        PetEntity pet = adoption.getPet();
-        adoptionRepository.deleteById(id);
-        petRepository.delete(pet);
+        if (adoption.getStatus() == Status.ACCEPTED) {
+            canDeletePet = true;
+        }
+
+        adoptionRepository.deleteById(adoption.getId());
+
+        if(canDeletePet) {
+            PetEntity pet = adoption.getPet();
+            petRepository.delete(pet);
+        }
     }
 }
